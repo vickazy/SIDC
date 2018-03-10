@@ -12,7 +12,7 @@ class Kategori extends CI_Controller{
 		$this->load->model('M_tata_usaha');
 		$this->load->model('M_login');
 		$this->load->model('M_kategori');
-		if(!$this->session->userdata('username')){
+		if(!$this->session->userdata('u_id')){
             redirect('home');
 		}
     }
