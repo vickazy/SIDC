@@ -188,7 +188,7 @@
 				<?php $idkat=$row->id_kategori;?>
 				<td >
 					<?php
-						$cekmhs=$this->m_mahasiswa->cekgambar($mahasiswa['nim'],$idkat)->num_rows();
+						$cekmhs=$this->M_mahasiswa->cekgambar($mahasiswa['nim'],$idkat)->num_rows();
 						if($cekmhs==0){?>
 							<form action= <?php echo site_url('mahasiswa/kompres_jadi');?> method='post' enctype='multipart/form-data' role='form'>
 											<?php
@@ -198,7 +198,7 @@
 								
 						}else{
 							$idkat=$row->id_kategori;
-							$gr=$this->m_mahasiswa->cekgamba($idkat,$id)->row_array();
+							$gr=$this->M_mahasiswa->cekgamba($idkat,$id)->row_array();
 							$gambar=['src'=>'gambarmhs/'.$gr['nama_gambar'],
 									'width'=>'100', 'class'=>'img4'];
 							$info = getimagesize('gambarmhs/'.$gr['nama_gambar']);
@@ -209,7 +209,7 @@
 				</td>
 				<td width=75 align = "center">
 					<?php 
-						$cekmhs=$this->m_mahasiswa->cekgambar($mahasiswa['nim'],$idkat)->num_rows();
+						$cekmhs=$this->M_mahasiswa->cekgambar($mahasiswa['nim'],$idkat)->num_rows();
 						if($cekmhs==0){
 							echo "<input class='btn btn-flat btn-md btn-success' type='submit'  value='Tambah' name='gambar'/>";
 							echo "</form>";

@@ -126,7 +126,7 @@ zoomStyle : {
 				<?php $idkat=$row->id_kategori;?>
 				<td >
 					<?php
-						$cekdosen=$this->m_dosen->cekgambar($dosen['id_dosen'],$idkat)->num_rows();
+						$cekdosen=$this->M_dosen->cekgambar($dosen['id_dosen'],$idkat)->num_rows();
 						if($cekdosen==0){?>
 							<form action= <?php echo site_url('dosen/kompres_jadi');?> method='post' enctype='multipart/form-data' role='form'>
 											<?php
@@ -136,7 +136,7 @@ zoomStyle : {
 								
 						}else{
 							$idkat=$row->id_kategori;
-							$gr=$this->m_dosen->cekgamba($idkat,$id)->row_array();
+							$gr=$this->M_dosen->cekgamba($idkat,$id)->row_array();
 							$gambar=['src'=>'gambardosen/'.$gr['nama_gambar'],
 									'width'=>'100', 'class'=>'img4'];
 							$info = getimagesize('gambardosen/'.$gr['nama_gambar']);
@@ -148,7 +148,7 @@ zoomStyle : {
 				</td>
 				<td width=75 align = "center">
 					<?php 
-						$cekdosen=$this->m_dosen->cekgambar($dosen['id_dosen'],$idkat)->num_rows();
+						$cekdosen=$this->M_dosen->cekgambar($dosen['id_dosen'],$idkat)->num_rows();
 						if($cekdosen==0){
 							echo "<input class='btn btn-flat btn-md btn-success' type='submit'  value='Tambah' name='gambar'/>";
 							echo "</form>";

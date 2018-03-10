@@ -105,7 +105,7 @@
 				<?php $idkat=$row->id_kategori;?>
 				<td >
 					<?php
-						$cektu=$this->m_tata_usaha->cekgambar($tata_usaha['id_tu'],$idkat)->num_rows();
+						$cektu=$this->M_tata_usaha->cekgambar($tata_usaha['id_tu'],$idkat)->num_rows();
 						if($cektu==0){?>
 							<form action= <?php echo site_url('tata_usaha/kompres_jadi');?> method='post' enctype='multipart/form-data' role='form'>
 											<?php
@@ -115,7 +115,7 @@
 								
 						}else{
 							$idkat=$row->id_kategori;
-							$gr=$this->m_tata_usaha->cekgamba($idkat,$id)->row_array();
+							$gr=$this->M_tata_usaha->cekgamba($idkat,$id)->row_array();
 							$gambar=['src'=>'gambartu/'.$gr['nama_gambar'],
 									'width'=>'100', 'class'=>'img4'];
 							$info = getimagesize('gambartu/'.$gr['nama_gambar']);
@@ -126,7 +126,7 @@
 				</td>
 				<td width=75 align = "center">
 					<?php 
-						$cektu=$this->m_tata_usaha->cekgambar($tata_usaha['id_tu'],$idkat)->num_rows();
+						$cektu=$this->M_tata_usaha->cekgambar($tata_usaha['id_tu'],$idkat)->num_rows();
 						if($cektu==0){
 							echo "<input class='btn btn-flat btn-md btn-success' type='submit'  value='Tambah' name='gambar'/>";
 							echo "</form>";

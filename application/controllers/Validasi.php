@@ -93,33 +93,33 @@ class Validasi extends CI_Controller{
 	}
 	function pilih($username,$a){
 		if($a=='tata_usaha'){
-			$this->session->set_userdata('username',$username);
-			$session_id = $this->session->userdata('username');
+			$this->session->set_userdata('u_id',$username);
+			$session_id = $this->session->userdata('u_id');
 			$level='tata_usaha';
 			$this->session->set_userdata('level',$level);
 			redirect('dashboard');
 		}elseif($a=='dosen'){
-			$this->session->set_userdata('username',$username);
-			$session_id = $this->session->userdata('username');
+			$this->session->set_userdata('u_id',$username);
+			$session_id = $this->session->userdata('u_id');
 			$level='dosen';
 			$this->session->set_userdata('level',$level);
 			redirect('dashboard');
 		}elseif($a=='mahasiswa'){
-			$this->session->set_userdata('username',$username);
-			$session_id = $this->session->userdata('username');
+			$this->session->set_userdata('u_id',$username);
+			$session_id = $this->session->userdata('u_id');
 			$level='mahasiswa';
 			$this->session->set_userdata('level',$level);
 			redirect('dashboard');
 		}elseif($a=='superadmin'){
-			$this->session->set_userdata('username',$username);
-			$session_id = $this->session->userdata('username');
+			$this->session->set_userdata('u_id',$username);
+			$session_id = $this->session->userdata('u_id');
 			$level='superadmin';
 			$this->session->set_userdata('level',$level);
 			redirect('dashboard');
 		}
 	}
 	function logout(){
-        $this->session->unset_userdata('username');
+        $this->session->unset_userdata('u_id');
         redirect('home');
     }
 }

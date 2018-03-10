@@ -9,8 +9,8 @@ class Dashboard extends CI_Controller{
 		$this->load->model('M_tata_usaha');
 		$this->load->model('M_login');
 		$this->load->model('M_kategori');
-		$this->load->library(array('pagination','form_validation','upload'));
-		 if(!$this->session->userdata('username')){
+		$this->load->library(array('pagination', 'form_validation','upload'));
+		 if(!$this->session->userdata('u_id')){
             redirect('home');
 		}
     }
@@ -38,7 +38,7 @@ class Dashboard extends CI_Controller{
 		$this->load->view('admin/template',$data);
     }	
 	function logout(){
-        $this->session->unset_userdata('username');
+        $this->session->unset_userdata('u_id');
         $this->session->unset_userdata('level');
         redirect('home');
     }

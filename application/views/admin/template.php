@@ -138,7 +138,7 @@
 							<li class="dropdown profile">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 									<?php 
-										$session_id = $this->session->userdata('username');
+										$session_id = $this->session->userdata('u_id');
 										$level = $this->session->userdata('level');
 										$akses1=$this->M_login->akses_tu($session_id)->row_array();
 										$akses2=$this->M_login->akses_dos($session_id)->row_array();
