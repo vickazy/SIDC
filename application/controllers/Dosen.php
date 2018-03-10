@@ -15,7 +15,7 @@ class Dosen extends CI_Controller{
 		$this->load->database();
         $this->load->helper(array('form','url','file'));
 		$this->load->library('upload','tools');
-		if(!$this->session->userdata('username')){
+		if(!$this->session->userdata('u_id')){
             redirect('home');
 		}
     }
@@ -71,7 +71,7 @@ class Dosen extends CI_Controller{
 		$data['title']="Dosen | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Dosen";
 		$data['content']="dosen1/index.php";
-		$user_dos=$this->session->userdata('username');
+		$user_dos=$this->session->userdata('u_id');
 		$data['dosen']=$this->M_dosen->ambil_data_dos($user_dos)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('dosen/dosen1/');
