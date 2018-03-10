@@ -3,10 +3,10 @@ class Validasi extends CI_Controller{
     
 	function __construct(){
         parent::__construct();
-		$this->load->model('m_mahasiswa');
-		$this->load->model('m_dosen');
-		$this->load->model('m_tata_usaha');
-		$this->load->model('m_login');
+		$this->load->model('M_mahasiswa');
+		$this->load->model('M_dosen');
+		$this->load->model('M_tata_usaha');
+		$this->load->model('M_login');
 		$this->load->library(array('pagination','form_validation','upload'));
 		$this->load->helper('back'); // helper yg di atas
 		backButtonHandle();
@@ -17,7 +17,7 @@ class Validasi extends CI_Controller{
 		$data['content']="validasimaha/index.php";
 		$user=$this->uri->segment(4);
 		$data['session_id']=$user;
-		$data['mahasiswa']=$this->m_login->maha($user)->row_array();
+		$data['mahasiswa']=$this->M_login->maha($user)->row_array();
 		$this->load->view('admin/template_maha',$data);
     }
     function validasi_pass(){
@@ -26,7 +26,7 @@ class Validasi extends CI_Controller{
 		$data['content']="validasimaha/password.php";
 		$user=$this->uri->segment(4);
 		$data['session_id']=$user;
-		$data['mahasiswa']=$this->m_login->maha($user)->row_array();
+		$data['mahasiswa']=$this->M_login->maha($user)->row_array();
 		$this->load->view('admin/template_maha',$data);
     }
 	function akses(){
@@ -34,12 +34,12 @@ class Validasi extends CI_Controller{
 		$data['judul']="Pilih Hak Akses Anda";
 		$akses=$this->uri->segment(3);
 		$data['session_id']=$akses;
-		$cek1=$this->m_login->cektu($akses)->row_array();
-		$cek2=$this->m_login->cekdosen($akses)->row_array();
+		$cek1=$this->M_login->cektu($akses)->row_array();
+		$cek2=$this->M_login->cekdosen($akses)->row_array();
 		if($cek1>0){
-			$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+			$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 		}elseif($cek2>0){
-			$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+			$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 		}
 		$this->load->view('admin/akses/index',$data);
     }	
@@ -75,7 +75,7 @@ class Validasi extends CI_Controller{
 			'ibu'=>$this->input->post('nama_ibu'),
 			'ayah'=>$this->input->post('nama_ayah')
 		);
-		$this->m_mahasiswa->update($info, $nimkirim);
+		$this->M_mahasiswa->update($info, $nimkirim);
 		$this->session->set_flashdata('m_sukses','Validasi Data sudah berhasil!');
 		$level='mahasiswa';
 		$this->session->set_userdata('level',$level);
@@ -85,7 +85,7 @@ class Validasi extends CI_Controller{
 		$info=array(
 			'password'=>md5($this->input->post('password'))
 		);
-		$this->m_mahasiswa->update($info, $nimkirim);
+		$this->M_mahasiswa->update($info, $nimkirim);
 		$this->session->set_flashdata('m_sukses','Validasi Data sudah berhasil!');
 		$level='mahasiswa';
 		$this->session->set_userdata('level',$level);

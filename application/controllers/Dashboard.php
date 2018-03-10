@@ -4,11 +4,11 @@ class Dashboard extends CI_Controller{
     
 	function __construct(){
         parent::__construct();
-		$this->load->model('m_mahasiswa');
-		$this->load->model('m_dosen');
-		$this->load->model('m_tata_usaha');
-		$this->load->model('m_login');
-		$this->load->model('m_kategori');
+		$this->load->model('M_mahasiswa');
+		$this->load->model('M_dosen');
+		$this->load->model('M_tata_usaha');
+		$this->load->model('M_login');
+		$this->load->model('M_kategori');
 		$this->load->library(array('pagination','form_validation','upload'));
 		 if(!$this->session->userdata('username')){
             redirect('home');
@@ -21,13 +21,13 @@ class Dashboard extends CI_Controller{
 		$data['title']="Dashboard | SI Data Center AKN Bojonegoro";
 		$data['judul']="HALAMAN UTAMA";
 		$data['content']="dashboard/index.php";
-		$data['dosen']=$this->m_dosen->ambil_data_semua()->num_rows();
-		$data['tata_usaha']=$this->m_tata_usaha->ambil_data_semua()->num_rows();
-		$data['mahasiswa']=$this->m_mahasiswa->ambil_data_semua()->num_rows();
-		$data['kateg_dos']=$this->m_kategori->jumlahaktif();
-		$data['kateg_tu']=$this->m_kategori->jumlahaktiftu();
-		$data['kateg_maha']=$this->m_kategori->jumlahaktifmhs();
-		$data['unggah']=$this->m_kategori->jajal()->row_array();
+		$data['dosen']=$this->M_dosen->ambil_data_semua()->num_rows();
+		$data['tata_usaha']=$this->M_tata_usaha->ambil_data_semua()->num_rows();
+		$data['mahasiswa']=$this->M_mahasiswa->ambil_data_semua()->num_rows();
+		$data['kateg_dos']=$this->M_kategori->jumlahaktif();
+		$data['kateg_tu']=$this->M_kategori->jumlahaktiftu();
+		$data['kateg_maha']=$this->M_kategori->jumlahaktifmhs();
+		$data['unggah']=$this->M_kategori->jajal()->row_array();
 		$this->load->view('admin/template',$data);
     }
 	function profil($id){

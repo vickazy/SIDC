@@ -7,11 +7,11 @@ class Mahasiswa extends CI_Controller{
 		$this->load->helper('back'); // helper yg di atas
 		backButtonHandle();
 		$this->load->library(array('pagination','form_validation','upload','tools'));
-		$this->load->model('m_mahasiswa');
-		$this->load->model('m_dosen');
-		$this->load->model('m_tata_usaha');
-		$this->load->model('m_kategori');
-		$this->load->model('m_login');
+		$this->load->model('M_mahasiswa');
+		$this->load->model('M_dosen');
+		$this->load->model('M_tata_usaha');
+		$this->load->model('M_kategori');
+		$this->load->model('M_login');
 		$this->load->database();
         $this->load->helper(array('form','url','file'));
 		$this->load->library('Excel_reader');
@@ -30,10 +30,10 @@ class Mahasiswa extends CI_Controller{
 		$data['title']="Mahasiswa | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Mahasiswa";
 		$data['content']="mahasiswa/index.php";
-		$data['mahasiswa']=$this->m_mahasiswa->ambil_data($this->limit,$offset,$order_column,$order_type)->result();
+		$data['mahasiswa']=$this->M_mahasiswa->ambil_data($this->limit,$offset,$order_column,$order_type)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('mahasiswa/index/');
-        $config['total_rows']	=$this->m_mahasiswa->jumlahaktif();
+        $config['total_rows']	=$this->M_mahasiswa->jumlahaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		
@@ -71,10 +71,10 @@ class Mahasiswa extends CI_Controller{
 		$data['judul']="MASTER DATA > Mahasiswa";
 		$data['content']="mahasiswa1/index.php";
 		$user_mhs=$this->session->userdata('username');
-		$data['mahasiswa']=$this->m_mahasiswa->ambil_data_mhs($user_mhs)->result();
+		$data['mahasiswa']=$this->M_mahasiswa->ambil_data_mhs($user_mhs)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('mahasiswa/mahasiswa1/');
-        $config['total_rows']	=$this->m_mahasiswa->jumlahaktif();
+        $config['total_rows']	=$this->M_mahasiswa->jumlahaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		$this->load->view('admin/template',$data);
@@ -85,7 +85,7 @@ class Mahasiswa extends CI_Controller{
 		$data['title']="Mahasiswa | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Mahasiswa > Tambah";		
 		$data['content']="mahasiswa/tambah.php";
-		$data['gelombang']=$this->m_mahasiswa->gelombang();
+		$data['gelombang']=$this->M_mahasiswa->gelombang();
 		$this->load->view('admin/template',$data);
 	}
 	function tambah_proses(){
@@ -121,7 +121,7 @@ class Mahasiswa extends CI_Controller{
 		$kota_sekolah=$this->input->post('kota_sekolah'); 	// mendapatkan input dari kode
 		$gelombang=$this->input->post('gelombang'); 	// mendapatkan input dari kode
 		$akses='akses001';
-		$cek=$this->m_mahasiswa->cek($id); 			// cek kode di database
+		$cek=$this->M_mahasiswa->cek($id); 			// cek kode di database
 		if($cek->num_rows()>0){ 				// jika kode sudah ada, maka tampilkan pesan
 			$this->session->set_flashdata('m_eror','Mahasiswa <b>'.$id." - ".$nama. '</b> sudah ada!');
 			redirect('mahasiswa/tambah');
@@ -161,8 +161,8 @@ class Mahasiswa extends CI_Controller{
 				'username'=>$id,
 				'password'=>md5($id)
 			);
-			$this->m_mahasiswa->simpan($info);
-			$this->m_mahasiswa->simakses($id,$akses);
+			$this->M_mahasiswa->simpan($info);
+			$this->M_mahasiswa->simakses($id,$akses);
 			$this->session->set_flashdata('m_sukses','Mahasiswa <b>'.$id." - ".$nama. '</b> berhasil ditambahkan!');
 			redirect('mahasiswa');
 		}
@@ -235,8 +235,8 @@ class Mahasiswa extends CI_Controller{
 			  $path = './assets/file/'.$files;
 			  delete_files($path);
 			  $this->load->model('M_mahasiswa');
-			  $this->m_mahasiswa->loaddata($dataexcel);
-			  $this->m_mahasiswa->loaddata2($dataexcel2);
+			  $this->M_mahasiswa->loaddata($dataexcel);
+			  $this->M_mahasiswa->loaddata2($dataexcel2);
 			}
 			$this->session->set_flashdata('m_sukses','Data Berhasil Di Impor!');
 			redirect('mahasiswa');
@@ -248,7 +248,7 @@ class Mahasiswa extends CI_Controller{
 		$data['title']	="edit Mahasiswa"; 		//judul
 		$data['judul']="MASTER DATA > Mahasiswa > Edit";	
         $data['content']="mahasiswa/edit.php"; 	//konten
-        $data['mahasiswa']	=$this->m_mahasiswa->ceki($nim)->row_array(); //ambil data
+        $data['mahasiswa']	=$this->M_mahasiswa->ceki($nim)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function edit1($nim){
@@ -257,7 +257,7 @@ class Mahasiswa extends CI_Controller{
 		$data['title']	="edit Mahasiswa"; 		//judul
 		$data['judul']="MASTER DATA > Mahasiswa > Edit";	
         $data['content']="mahasiswa1/edit.php"; 	//konten
-        $data['mahasiswa']	=$this->m_mahasiswa->ceki($nim)->row_array(); //ambil data
+        $data['mahasiswa']	=$this->M_mahasiswa->ceki($nim)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}	
 		
@@ -293,7 +293,7 @@ class Mahasiswa extends CI_Controller{
 			'ibu'=>$this->input->post('nama_ibu'),
 			'ayah'=>$this->input->post('nama_ayah')
 		);
-		$this->m_mahasiswa->update($info, $nimkirim);
+		$this->M_mahasiswa->update($info, $nimkirim);
 		$this->session->set_flashdata('m_sukses','Data sudah berhasil diedit!');
 		redirect('mahasiswa');
 	}
@@ -329,7 +329,7 @@ class Mahasiswa extends CI_Controller{
 			'ibu'=>$this->input->post('nama_ibu'),
 			'ayah'=>$this->input->post('nama_ayah')
 		);
-		$this->m_mahasiswa->update($info, $nimkirim);
+		$this->M_mahasiswa->update($info, $nimkirim);
 		$this->session->set_flashdata('m_sukses','Data sudah berhasil diedit!');
 		redirect('mahasiswa/mahasiswa1');
 	}
@@ -365,7 +365,7 @@ class Mahasiswa extends CI_Controller{
 			'ibu'=>$this->input->post('nama_ibu'),
 			'ayah'=>$this->input->post('nama_ayah')
 		);
-		$this->m_mahasiswa->update($info, $nimkirim);
+		$this->M_mahasiswa->update($info, $nimkirim);
 		$this->session->set_flashdata('m_sukses','Data sudah berhasil diedit!');
 		redirect('mahasiswa/detail/'.$nimkirim);
 	}
@@ -373,7 +373,7 @@ class Mahasiswa extends CI_Controller{
 		$info=array(
 			'password'=>md5($this->input->post('password'))
 		);
-		$this->m_mahasiswa->update($info, $nimkirim);
+		$this->M_mahasiswa->update($info, $nimkirim);
 		$this->session->set_flashdata('m_sukses','Password <b>'.$nimkirim. '</b> berhasil diedit!');
 		redirect('mahasiswa/detail/'.$nimkirim);
 	}
@@ -382,66 +382,66 @@ class Mahasiswa extends CI_Controller{
 		$level = $this->session->userdata('level');
 		$session_id = $this->session->userdata('username');
 		$akses=($session_id);
-		$cek1=$this->m_login->cektu($akses)->row_array();
-		$cek2=$this->m_login->cekdosen($akses)->row_array();
+		$cek1=$this->M_login->cektu($akses)->row_array();
+		$cek2=$this->M_login->cekdosen($akses)->row_array();
 		if ($level=='administrator'){
 			$data['menu']		="menu.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='dosen'){
 			$data['menu']		="menu_dosen.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='tata_usaha'){
 			$data['menu']		="menu_tata_usaha.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='mahasiswa'){
 			$data['menu']		="menu_mahasiswa.php";
-			$cek3=$this->m_login->cekmaha($akses)->row_array();
+			$cek3=$this->M_login->cekmaha($akses)->row_array();
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}elseif($cek3>0){
-				$data['nim']=$this->m_login->akses_maha($akses)->result();
+				$data['nim']=$this->M_login->akses_maha($akses)->result();
 			}
 		}elseif($level=='pimpinan'){
 			$data['menu']		="menu_pimpinan.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='superadmin'){
 			$data['menu']		="menu_super.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}else{
 			$data['menu']		="menu_rektor.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}
 		
 		$data['title']="hapus mahasiswa";
 		$data['judul']="MASTER DATA > Mahasiswa > Hapus";//judul
         $data['content']="mahasiswa/hapus.php"; //konten
-        $data['mahasiswa']=$this->m_mahasiswa->ceki($nim)->row_array(); //ambil data
+        $data['mahasiswa']=$this->M_mahasiswa->ceki($nim)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 
@@ -451,7 +451,7 @@ class Mahasiswa extends CI_Controller{
 			'nim'=>$nimkirim,
 			'status'=>$status,
 		);
-        $this->m_mahasiswa->update_hapus($info,$nimkirim);
+        $this->M_mahasiswa->update_hapus($info,$nimkirim);
 		$this->session->set_flashdata('m_sukses','Data Mahasiswa sudah berhasil dinonaktifkan!');
 		redirect('mahasiswa');
     }
@@ -461,8 +461,8 @@ class Mahasiswa extends CI_Controller{
 		$data['title']		="detail mahasiswa";
 		$data['judul']		="MASTER DATA > Mahasiswa > Detail"; //judul
         $data['content']	="mahasiswa/detail.php"; //konten
-        $data['mahasiswa']	=$this->m_mahasiswa->ceki($nim)->row_array(); //ambil data
-		$data['kategori']	=$this->m_mahasiswa->kategori()->result(); //ambil data
+        $data['mahasiswa']	=$this->M_mahasiswa->ceki($nim)->row_array(); //ambil data
+		$data['kategori']	=$this->M_mahasiswa->kategori()->result(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function detail1($nim){
@@ -471,8 +471,8 @@ class Mahasiswa extends CI_Controller{
 		$data['title']		="detail mahasiswa";
 		$data['judul']		="MASTER DATA > Mahasiswa > Detail"; //judul
         $data['content']	="mahasiswa1/detail.php"; //konten
-        $data['mahasiswa']	=$this->m_mahasiswa->ceki($nim)->row_array(); //ambil data
-		$data['kategori']	=$this->m_mahasiswa->kategori()->result(); //ambil data
+        $data['mahasiswa']	=$this->M_mahasiswa->ceki($nim)->row_array(); //ambil data
+		$data['kategori']	=$this->M_mahasiswa->kategori()->result(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function detailnon($nim){
@@ -481,7 +481,7 @@ class Mahasiswa extends CI_Controller{
 		$data['title']="detail mahasiswa";
 		$data['judul']="MASTER DATA > Mahasiswa > Detail"; //judul
         $data['content']="mahasiswa/detailnon.php"; //konten
-        $data['mahasiswa']=$this->m_mahasiswa->cekn($nim)->row_array(); //ambil data
+        $data['mahasiswa']=$this->M_mahasiswa->cekn($nim)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function aktifkan($nim){
@@ -489,45 +489,45 @@ class Mahasiswa extends CI_Controller{
 		$level = $this->session->userdata('level');
 		$session_id = $this->session->userdata('username');
 		$akses=($session_id);
-		$cek1=$this->m_login->cektu($akses)->row_array();
-		$cek2=$this->m_login->cekdosen($akses)->row_array();
+		$cek1=$this->M_login->cektu($akses)->row_array();
+		$cek2=$this->M_login->cekdosen($akses)->row_array();
 		if ($level=='superadmin'){
 			$data['menu']		="menu_super.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='dosen'){
 			$data['menu']		="menu_dosen.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='tata_usaha'){
 			$data['menu']		="menu_tata_usaha.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='mahasiswa'){
 			$data['menu']		="menu_mahasiswa.php";
-			$cek3=$this->m_login->cekmaha($akses)->row_array();
+			$cek3=$this->M_login->cekmaha($akses)->row_array();
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}elseif($cek3>0){
-				$data['nim']=$this->m_login->akses_maha($akses)->result();
+				$data['nim']=$this->M_login->akses_maha($akses)->result();
 			}
 		}
 		
 		$data['title']="aktifkan Mahasiswa";
 		$data['judul']="MASTER DATA > Mahasiswa > Aktifkan";//judul
         $data['content']="mahasiswa/aktifkan.php"; //konten
-        $data['mahasiswa']=$this->m_mahasiswa->cekaktif($nim)->row_array(); //ambil data
+        $data['mahasiswa']=$this->M_mahasiswa->cekaktif($nim)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function aktifkan_proses($nimkirim){
@@ -536,7 +536,7 @@ class Mahasiswa extends CI_Controller{
 			'nim'=>$nimkirim,
 			'status'=>$status,
 		);
-        $this->m_mahasiswa->update_aktif($info,$nimkirim);
+        $this->M_mahasiswa->update_aktif($info,$nimkirim);
 		$this->session->set_flashdata('m_sukses','Data Mahasiswa sudah berhasil diaktifkan!');
 		redirect('mahasiswa/nonaktif');
     }
@@ -550,10 +550,10 @@ class Mahasiswa extends CI_Controller{
 		$data['title']="Mahasiswa | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Mahasiswa";
 		$data['content']="mahasiswa/nonaktif.php";
-		$data['mahasiswa']=$this->m_mahasiswa->ambil_non($this->limit,$offset,$order_column,$order_type)->result();
+		$data['mahasiswa']=$this->M_mahasiswa->ambil_non($this->limit,$offset,$order_column,$order_type)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('mahasiswa/nonaktif/');
-        $config['total_rows']	=$this->m_mahasiswa->jumlahnonaktif();
+        $config['total_rows']	=$this->M_mahasiswa->jumlahnonaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		
@@ -590,8 +590,8 @@ class Mahasiswa extends CI_Controller{
 			redirect(mahasiswa);
 		}
 		else{
-			$cek=$this->m_mahasiswa->cari($cari);
-			$cekid=$this->m_mahasiswa->cariid($cari);
+			$cek=$this->M_mahasiswa->cari($cari);
+			$cekid=$this->M_mahasiswa->cariid($cari);
 			$hasil=$cek->num_rows();
 			$hasilid=$cekid->num_rows();
 			if($hasil>0){
@@ -616,38 +616,38 @@ class Mahasiswa extends CI_Controller{
 		$level = $this->session->userdata('level');
 		$session_id = $this->session->userdata('username');
 		$akses=($session_id);
-		$cek1=$this->m_login->cektu($akses)->row_array();
-		$cek2=$this->m_login->cekdosen($akses)->row_array();
+		$cek1=$this->M_login->cektu($akses)->row_array();
+		$cek2=$this->M_login->cekdosen($akses)->row_array();
 		if ($level=='dosen'){
 			$data['menu']		="menu_dosen.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='tata_usaha'){
 			$data['menu']		="menu_tata_usaha.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}elseif($level=='mahasiswa'){
 			$data['menu']		="menu_mahasiswa.php";
-			$cek3=$this->m_login->cekmaha($akses)->row_array();
+			$cek3=$this->M_login->cekmaha($akses)->row_array();
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}elseif($cek3>0){
-				$data['nim']=$this->m_login->akses_maha($akses)->result();
+				$data['nim']=$this->M_login->akses_maha($akses)->result();
 			}
 		}elseif($level=='superadmin'){
 			$data['menu']		="menu_super.php";
 			if($cek1>0){
-				$data['jumlahakses']=$this->m_login->akses_tu($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_tu($akses)->result();
 			}elseif($cek2>0){
-				$data['jumlahakses']=$this->m_login->akses_dos($akses)->result();
+				$data['jumlahakses']=$this->M_login->akses_dos($akses)->result();
 			}
 		}
 		
@@ -659,7 +659,7 @@ class Mahasiswa extends CI_Controller{
 			redirect(mahasiswa);
 		}
 		else{
-			$cek=$this->m_mahasiswa->carinon($cari);
+			$cek=$this->M_mahasiswa->carinon($cari);
 			$hasil=$cek->num_rows();
 			if($hasil>0){
 				$data['mahasiswa']=$cek->result();
@@ -761,7 +761,7 @@ class Mahasiswa extends CI_Controller{
 				'tipe'			=> $tipe,
 				'ukuran'		=> $ukuran
 			);
-		$this->m_kategori->simpan_gambarmhs($info);
+		$this->M_kategori->simpan_gambarmhs($info);
 		$this->session->set_flashdata('m_sukses', 'Gambar Berhasil Diupload');
 		redirect('mahasiswa/detail'.'/'.$id_mhs.'/'.$quality);
 	}
@@ -772,16 +772,16 @@ class Mahasiswa extends CI_Controller{
 		$data['title']		="Hapus Gambar Mahasiswa";
 		$data['judul']		="MASTER DATA > Mahasiswa > Hapus";//judul
         $data['content']	="mahasiswa/hapusgambar.php"; //konten
-        $data['kategori']	=$this->m_kategori->cekmhss($id_upload)->row_array(); //ambil data
-        $data['mahasiswa']		=$this->m_mahasiswa->ceki($id)->row_array(); //ambil data
+        $data['kategori']	=$this->M_kategori->cekmhss($id_upload)->row_array(); //ambil data
+        $data['mahasiswa']		=$this->M_mahasiswa->ceki($id)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function hapusgambarmhs($idup,$id){
-		$upload=$this->m_mahasiswa->cekupload($idup)->row_array();
+		$upload=$this->M_mahasiswa->cekupload($idup)->row_array();
 		$nama = $upload['nama_gambar'];
 		$dir = "gambarmhs/".$nama;
 		unlink($dir);
-		$hapus=$this->m_mahasiswa->hapusgambar($idup);
+		$hapus=$this->M_mahasiswa->hapusgambar($idup);
 		$this->session->set_flashdata('m_sukses', 'Gambar Berhasil Dihapus');
 		redirect('mahasiswa/detail'.'/'.$id);
 	}

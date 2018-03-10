@@ -7,11 +7,11 @@ class Tata_usaha extends CI_Controller{
 		$this->load->helper('back'); // helper yg di atas
 		backButtonHandle();
 		$this->load->library(array('pagination','form_validation','upload','tools'));
-		$this->load->model('m_mahasiswa');
-		$this->load->model('m_dosen');
-		$this->load->model('m_tata_usaha');
-		$this->load->model('m_kategori');
-		$this->load->model('m_login');
+		$this->load->model('M_mahasiswa');
+		$this->load->model('M_dosen');
+		$this->load->model('M_tata_usaha');
+		$this->load->model('M_kategori');
+		$this->load->model('M_login');
 		$this->load->database();
         $this->load->helper(array('form','url','file'));
 		$this->load->library('Excel_reader');
@@ -30,12 +30,12 @@ class Tata_usaha extends CI_Controller{
 		$data['judul']="MASTER DATA > Tata Usaha";
 		$session_id = $this->session->userdata('username');
 		$tu=($session_id);
-		$data['jumlahakses']=$this->m_login->akses_tu($tu)->result();
+		$data['jumlahakses']=$this->M_login->akses_tu($tu)->result();
 		$data['content']="tata_usaha/index.php";
-		$data['tata_usaha']=$this->m_tata_usaha->ambil_data($this->limit,$offset,$order_column,$order_type)->result();
+		$data['tata_usaha']=$this->M_tata_usaha->ambil_data($this->limit,$offset,$order_column,$order_type)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('tata_usaha/index/');
-        $config['total_rows']	=$this->m_tata_usaha->jumlahaktif();
+        $config['total_rows']	=$this->M_tata_usaha->jumlahaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		
@@ -73,10 +73,10 @@ class Tata_usaha extends CI_Controller{
 		$data['judul']="MASTER DATA > Tata Usaha";
 		$data['content']="tata_usaha1/index.php";
 		$user_tu=$this->session->userdata('username');
-		$data['tata_usaha']=$this->m_tata_usaha->ambil_data_tu($user_tu)->result();
+		$data['tata_usaha']=$this->M_tata_usaha->ambil_data_tu($user_tu)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('tata_usaha/tata_usaha1/');
-        $config['total_rows']	=$this->m_tata_usaha->jumlahaktif();
+        $config['total_rows']	=$this->M_tata_usaha->jumlahaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		$this->load->view('admin/template',$data);
@@ -91,10 +91,10 @@ class Tata_usaha extends CI_Controller{
 		$data['title']="Tata Usaha | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Tata_usaha";
 		$data['content']="tata_usaha/nonaktif.php";
-		$data['tata_usaha']=$this->m_tata_usaha->ambil_non($this->limit,$offset,$order_column,$order_type)->result();
+		$data['tata_usaha']=$this->M_tata_usaha->ambil_non($this->limit,$offset,$order_column,$order_type)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('tata_usaha/nonaktif/');
-        $config['total_rows']	=$this->m_tata_usaha->jumlahnonaktif();
+        $config['total_rows']	=$this->M_tata_usaha->jumlahnonaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		
@@ -140,7 +140,7 @@ class Tata_usaha extends CI_Controller{
 		$status_keanggotaan=$this->input->post('status_keanggotaan'); 	// mendapatkan input dari kode
 		$alamat=$this->input->post('alamat'); 	// mendapatkan input dari kode
 		$akses='akses003';
-		$cek=$this->m_tata_usaha->cek($id); 			// cek kode di database
+		$cek=$this->M_tata_usaha->cek($id); 			// cek kode di database
 		if($cek->num_rows()>0){ 				// jika kode sudah ada, maka tampilkan pesan
 			$this->session->set_flashdata('m_eror','Tata Usaha <b>'.$id."-".$nama. '</b> sudah ada!');
 			redirect('tata_usaha/tambah');
@@ -159,8 +159,8 @@ class Tata_usaha extends CI_Controller{
 				'username'=>$id,
 				'password'=>md5($id)
 			);
-			$this->m_tata_usaha->simpan($info);
-			$this->m_tata_usaha->simakses($id,$akses);
+			$this->M_tata_usaha->simpan($info);
+			$this->M_tata_usaha->simakses($id,$akses);
 			$this->session->set_flashdata('m_sukses','Tata Usaha <b>'.$id.'</b> berhasil ditambahkan!');
 			redirect('tata_usaha');
 		}
@@ -209,8 +209,8 @@ class Tata_usaha extends CI_Controller{
 			  $path = './assets/file/' . $fil;
 			  delete_files($path);
 			  $this->load->model('M_tata_usaha');
-			  $this->m_tata_usaha->loaddata($dataexcel);
-			  $this->m_tata_usaha->loaddata2($dataexcel2);
+			  $this->M_tata_usaha->loaddata($dataexcel);
+			  $this->M_tata_usaha->loaddata2($dataexcel2);
 			}
 			$this->session->set_flashdata('m_sukses','Data Berhasil Di Impor!');
 			redirect('tata_usaha');
@@ -222,7 +222,7 @@ class Tata_usaha extends CI_Controller{
 		$data['title']	="edit Tata Usaha"; 		//judul
 		$data['judul']="MASTER DATA > Tata Usaha > Edit";	
         $data['content']="tata_usaha/edit.php"; 	//konten
-        $data['tata_usaha']	=$this->m_tata_usaha->ceki($id_tu)->row_array(); //ambil data
+        $data['tata_usaha']	=$this->M_tata_usaha->ceki($id_tu)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function edit_proses($id_tukirim){
@@ -238,7 +238,7 @@ class Tata_usaha extends CI_Controller{
 			'status_keanggotaan'=>$this->input->post('status_keanggotaan'),
 			'alamat'=>$this->input->post('alamat')
 		);
-		$this->m_tata_usaha->update($info, $id_tukirim);
+		$this->M_tata_usaha->update($info, $id_tukirim);
 		$this->session->set_flashdata('m_sukses','Data Tata Usaha <b>'.$id_tukirim. '</b> berhasil diedit!');
 		$level=$this->session->userdata('level');
 		if($level=='tata_usaha'){
@@ -260,7 +260,7 @@ class Tata_usaha extends CI_Controller{
 			'status_keanggotaan'=>$this->input->post('status_keanggotaan'),
 			'alamat'=>$this->input->post('alamat')
 		);
-		$this->m_tata_usaha->update($info, $id_tukirim);
+		$this->M_tata_usaha->update($info, $id_tukirim);
 		$this->session->set_flashdata('m_sukses','Data Tata Usaha <b>'.$id_tukirim. '</b> berhasil diedit!');
 		redirect('tata_usaha/detail/'.$id_tukirim);
 	}
@@ -269,7 +269,7 @@ class Tata_usaha extends CI_Controller{
 			'username'=>$this->input->post('username'),
 			'password'=>md5($this->input->post('password'))
 		);
-		$this->m_tata_usaha->update($info, $id_tukirim);
+		$this->M_tata_usaha->update($info, $id_tukirim);
 		$this->session->set_flashdata('m_sukses','Username dan Password <b>'.$id_tukirim. '</b> berhasil diedit!');
 		redirect('tata_usaha/detail/'.$id_tukirim);
 	}
@@ -279,7 +279,7 @@ class Tata_usaha extends CI_Controller{
 		$data['title']		="hapus Tata Usaha";
 		$data['judul']="MASTER DATA > Tata Usaha > Non Aktifkan";//judul
         $data['content']	="tata_usaha/hapus.php"; //konten
-        $data['tata_usaha']		=$this->m_tata_usaha->ceki($id_tu)->row_array(); //ambil data
+        $data['tata_usaha']		=$this->M_tata_usaha->ceki($id_tu)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function hapus_proses($id_tukirim){
@@ -288,7 +288,7 @@ class Tata_usaha extends CI_Controller{
 			'id_tu'=>$id_tukirim,
 			'status_keanggotaan'=>$status_keanggotaan,
 		);
-        $this->m_tata_usaha->update_hapus($info,$id_tukirim);
+        $this->M_tata_usaha->update_hapus($info,$id_tukirim);
 		$this->session->set_flashdata('m_sukses','Data Tata Usaha <b>'.$id_tukirim. '</b> berhasil dinonaktifkan!');
 		redirect('tata_usaha/nonaktif');
     }
@@ -298,7 +298,7 @@ class Tata_usaha extends CI_Controller{
 			'id_tu'=>$id_tukirim,
 			'status_keanggotaan'=>$status_keanggotaan,
 		);
-        $this->m_tata_usaha->update_hapus($info,$id_tukirim);
+        $this->M_tata_usaha->update_hapus($info,$id_tukirim);
 		$this->session->set_flashdata('m_sukses','Data Tata Usaha <b>'.$id_tukirim. '</b> berhasil dinonaktifkan!');
 		redirect('tata_usaha/nonaktif');
     }
@@ -308,10 +308,10 @@ class Tata_usaha extends CI_Controller{
 		$data['title']		="Detail Tata Usaha";
 		$data['judul']		="MASTER DATA > Tata Usaha > Detail"; //judul
         $data['content']	="tata_usaha/detail.php"; //konten
-        $data['tata_usaha']	=$this->m_tata_usaha->ceki($id_tu)->row_array(); //ambil data
-		$data['kategori']	=$this->m_tata_usaha->kategori()->result(); //ambil data
-		$data['akses_tu']	=$this->m_tata_usaha->akses_tu($this->uri->segment(3))->result(); //ambil data
-		$data['akses']		=$this->m_tata_usaha->akses()->result(); //ambil data
+        $data['tata_usaha']	=$this->M_tata_usaha->ceki($id_tu)->row_array(); //ambil data
+		$data['kategori']	=$this->M_tata_usaha->kategori()->result(); //ambil data
+		$data['akses_tu']	=$this->M_tata_usaha->akses_tu($this->uri->segment(3))->result(); //ambil data
+		$data['akses']		=$this->M_tata_usaha->akses()->result(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function detail1($id_tu){
@@ -320,8 +320,8 @@ class Tata_usaha extends CI_Controller{
 		$data['title']		="Detail Tata Usaha";
 		$data['judul']		="MASTER DATA > Tata Usaha > Detail"; //judul
         $data['content']	="tata_usaha/detail1.php"; //konten
-        $data['tata_usaha']	=$this->m_tata_usaha->ceki($id_tu)->row_array(); //ambil data
-		$data['kategori']	=$this->m_tata_usaha->kategori()->result(); //ambil data
+        $data['tata_usaha']	=$this->M_tata_usaha->ceki($id_tu)->row_array(); //ambil data
+		$data['kategori']	=$this->M_tata_usaha->kategori()->result(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function detailnon($id_tu){
@@ -330,7 +330,7 @@ class Tata_usaha extends CI_Controller{
 		$data['title']		="detail tata_usaha";
 		$data['judul']		="MASTER DATA > Tata Usaha > Detail"; //judul
         $data['content']	="tata_usaha/detailnon.php"; //konten
-        $data['tata_usaha']	=$this->m_tata_usaha->ceki($id_tu)->row_array(); //ambil data
+        $data['tata_usaha']	=$this->M_tata_usaha->ceki($id_tu)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 
@@ -340,7 +340,7 @@ class Tata_usaha extends CI_Controller{
 		$data['title']		="aktifkanTata_Usaha";
 		$data['judul']="MASTER DATA > Tata Usaha> Aktifkan";//judul
         $data['content']	="tata_usaha/aktifkan.php"; //konten
-        $data['tata_usaha']		=$this->m_tata_usaha->cekaktif($id_tu)->row_array(); //ambil data
+        $data['tata_usaha']		=$this->M_tata_usaha->cekaktif($id_tu)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function aktifkan_proses($id_tukirim){
@@ -349,7 +349,7 @@ class Tata_usaha extends CI_Controller{
 			'id_tu'=>$id_tukirim,
 			'status_keanggotaan'=>$status,
 		);
-        $this->m_tata_usaha->update_aktif($info,$id_tukirim);
+        $this->M_tata_usaha->update_aktif($info,$id_tukirim);
 		$this->session->set_flashdata('m_sukses','Data Tata Usaha <b>'.$id_tukirim. '</b> berhasil diaktifkan!');
 		redirect('tata_usaha/nonaktif');
     }
@@ -364,8 +364,8 @@ class Tata_usaha extends CI_Controller{
 			redirect(tata_usaha);
 		}
 		else{
-			$cek=$this->m_tata_usaha->cari($cari);
-			$cekid=$this->m_tata_usaha->cariid($cari);
+			$cek=$this->M_tata_usaha->cari($cari);
+			$cekid=$this->M_tata_usaha->cariid($cari);
 			$hasil=$cek->num_rows();
 			$hasilid=$cekid->num_rows();
 			if($hasil>0){
@@ -396,7 +396,7 @@ class Tata_usaha extends CI_Controller{
 			redirect(tata_usaha);
 		}
 		else{
-			$cek=$this->m_tata_usaha->carinon($cari);
+			$cek=$this->M_tata_usaha->carinon($cari);
 			$hasil=$cek->num_rows();
 			if($hasil>0){
 				$data['tata_usaha']=$cek->result();
@@ -498,7 +498,7 @@ class Tata_usaha extends CI_Controller{
 				'tipe'			=> $tipe,
 				'ukuran'		=> $ukuran
 			);
-		$this->m_kategori->simpan_gambartu($info);
+		$this->M_kategori->simpan_gambartu($info);
 		$this->session->set_flashdata('m_sukses', 'Gambar Berhasil Diupload');
 		$level=$this->session->userdata('level');
 		if ($level=='tata_usaha'){
@@ -514,16 +514,16 @@ class Tata_usaha extends CI_Controller{
 		$data['title']		="Hapus Gambar Tata Usaha";
 		$data['judul']		="MASTER DATA > Tata Usaha > Hapus";//judul
         $data['content']	="tata_usaha/hapusgambar.php"; //konten
-        $data['kategori']	=$this->m_kategori->cektuu($id_upload)->row_array(); //ambil data
-        $data['tata_usaha']		=$this->m_tata_usaha->ceki($id)->row_array(); //ambil data
+        $data['kategori']	=$this->M_kategori->cektuu($id_upload)->row_array(); //ambil data
+        $data['tata_usaha']		=$this->M_tata_usaha->ceki($id)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function hapusgambartu($idup,$id){
-		$upload=$this->m_tata_usaha->cekupload($idup)->row_array();
+		$upload=$this->M_tata_usaha->cekupload($idup)->row_array();
 		$nama = $upload['nama_gambar'];
 		$dir = "gambartu/".$nama;
 		unlink($dir);
-		$hapus=$this->m_tata_usaha->hapusgambar($idup);
+		$hapus=$this->M_tata_usaha->hapusgambar($idup);
 		$this->session->set_flashdata('m_sukses', 'Gambar Berhasil Dihapus');
 		$level=$this->session->userdata('level');
 		if ($level=='tata_usaha'){
@@ -535,12 +535,12 @@ class Tata_usaha extends CI_Controller{
 	function tambahakses(){
 		$id=$this->input->post('id_tu');
 		$akses=$this->input->post('akses');
-		$cekakses=$this->m_tata_usaha->cekakses($id,$akses)->num_rows();
+		$cekakses=$this->M_tata_usaha->cekakses($id,$akses)->num_rows();
 		if ($cekakses>0){
 			$this->session->set_flashdata('m_eror', 'Akses Sudah Ada!');
 			redirect('tata_usaha/detail'.'/'.$id);
 		}else{
-		$this->m_tata_usaha->simpanakses($id,$akses);
+		$this->M_tata_usaha->simpanakses($id,$akses);
 		$this->session->set_flashdata('m_sukses', 'Akses Berhasil Ditambahkan');
 		redirect('tata_usaha/detail'.'/'.$id);
 		}
@@ -548,7 +548,7 @@ class Tata_usaha extends CI_Controller{
 	function hapusakses(){
 		$id=$this->uri->segment(3);
 		$akses=$this->uri->segment(4);
-		$this->m_tata_usaha->hapusakses($id,$akses);
+		$this->M_tata_usaha->hapusakses($id,$akses);
 		$this->session->set_flashdata('m_sukses', 'Akses Berhasil Dihapus');
 		redirect('tata_usaha/detail'.'/'.$id);
 	}

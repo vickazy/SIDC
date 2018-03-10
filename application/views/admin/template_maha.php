@@ -110,7 +110,7 @@
 									<?php 
 										$session_id = $this->session->userdata('username');
 										$level = $this->session->userdata('level');
-										$akses=$this->m_login->akses_maha($session_id)->row_array();
+										$akses=$this->M_login->akses_maha($session_id)->row_array();
 										if($akses){
 											$nama=$akses['nama_mahasiswa'];
 										}

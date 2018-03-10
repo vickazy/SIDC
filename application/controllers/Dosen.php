@@ -7,11 +7,11 @@ class Dosen extends CI_Controller{
 		$this->load->helper('back','url'); // helper yg di atas
 		backButtonHandle();
 		$this->load->library(array('pagination','form_validation','upload','tools'));
-		$this->load->model('m_mahasiswa');
-		$this->load->model('m_dosen');
-		$this->load->model('m_tata_usaha');
-		$this->load->model('m_kategori');
-		$this->load->model('m_login');
+		$this->load->model('M_mahasiswa');
+		$this->load->model('M_dosen');
+		$this->load->model('M_tata_usaha');
+		$this->load->model('M_kategori');
+		$this->load->model('M_login');
 		$this->load->database();
         $this->load->helper(array('form','url','file'));
 		$this->load->library('upload','tools');
@@ -31,10 +31,10 @@ class Dosen extends CI_Controller{
 		$data['title']="Dosen | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Dosen";
 		$data['content']="dosen/index.php";
-		$data['dosen']=$this->m_dosen->ambil_data($this->limit,$offset,$order_column,$order_type)->result();
+		$data['dosen']=$this->M_dosen->ambil_data($this->limit,$offset,$order_column,$order_type)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('dosen/index/');
-        $config['total_rows']	=$this->m_dosen->jumlahaktif();
+        $config['total_rows']	=$this->M_dosen->jumlahaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		
@@ -72,10 +72,10 @@ class Dosen extends CI_Controller{
 		$data['judul']="MASTER DATA > Dosen";
 		$data['content']="dosen1/index.php";
 		$user_dos=$this->session->userdata('username');
-		$data['dosen']=$this->m_dosen->ambil_data_dos($user_dos)->result();
+		$data['dosen']=$this->M_dosen->ambil_data_dos($user_dos)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('dosen/dosen1/');
-        $config['total_rows']	=$this->m_dosen->jumlahaktif();
+        $config['total_rows']	=$this->M_dosen->jumlahaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		$this->load->view('admin/template',$data);
@@ -102,7 +102,7 @@ class Dosen extends CI_Controller{
 		$status_keanggotaan=$this->input->post('status_keanggotaan'); 	// mendapatkan input dari kode
 		$akses='akses002'; 
 		$alamat=$this->input->post('alamat'); 
-		$cek=$this->m_dosen->cek($id); 			// cek kode di database
+		$cek=$this->M_dosen->cek($id); 			// cek kode di database
 		if($cek->num_rows()>0){ 				// jika kode sudah ada, maka tampilkan pesan
 			$this->session->set_flashdata('m_eror','Dosen <b>'.$id."-".$nama. '</b> sudah ada!');
 			redirect('dosen/tambah');
@@ -121,8 +121,8 @@ class Dosen extends CI_Controller{
 				'username'=>$id,
 				'password'=>md5($id)
 			);
-			$this->m_dosen->simpan($info);
-			$this->m_dosen->simakses($id,$akses);
+			$this->M_dosen->simpan($info);
+			$this->M_dosen->simakses($id,$akses);
 			$this->session->set_flashdata('m_sukses','Dosen <b>'.$id."-".$nama. '</b> berhasil ditambahkan!');
 			redirect('dosen');
 		}
@@ -133,7 +133,7 @@ class Dosen extends CI_Controller{
 		$data['title']	="edit Dosen"; 		//judul
 		$data['judul']="MASTER DATA > Dosen > Edit";	
         $data['content']="dosen/edit.php"; 	//konten
-        $data['dosen']	=$this->m_dosen->ceki($id_dosen)->row_array(); //ambil data
+        $data['dosen']	=$this->M_dosen->ceki($id_dosen)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function edit1($id_dosen){
@@ -142,7 +142,7 @@ class Dosen extends CI_Controller{
 		$data['title']	="edit Dosen"; 		//judul
 		$data['judul']="MASTER DATA > Dosen > Edit";	
         $data['content']="dosen1/edit.php"; 	//konten
-        $data['dosen']	=$this->m_dosen->ceki($id_dosen)->row_array(); //ambil data
+        $data['dosen']	=$this->M_dosen->ceki($id_dosen)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function edit_proses($id_dosenkirim){
@@ -158,7 +158,7 @@ class Dosen extends CI_Controller{
 			'status_keanggotaan'=>$this->input->post('status_keanggotaan'),
 			'alamat'=>$this->input->post('alamat')
 		);
-		$this->m_dosen->update($info, $id_dosenkirim);
+		$this->M_dosen->update($info, $id_dosenkirim);
 		$this->session->set_flashdata('m_sukses','Data Dosen sudah berhasil diedit!');
 		$level=$this->session->userdata('level');
 		if($level=='dosen'){
@@ -180,7 +180,7 @@ class Dosen extends CI_Controller{
 			'status_keanggotaan'=>$this->input->post('status_keanggotaan'),
 			'alamat'=>$this->input->post('alamat')
 		);
-		$this->m_dosen->update($info, $id_dosenkirim);
+		$this->M_dosen->update($info, $id_dosenkirim);
 		$this->session->set_flashdata('m_sukses','Data berhasil diedit!');
 		redirect('dosen/detail/'.$id_dosenkirim);
 	}
@@ -189,7 +189,7 @@ class Dosen extends CI_Controller{
 			'username'=>$this->input->post('username'),
 			'password'=>md5($this->input->post('password'))
 		);
-		$this->m_dosen->update($info, $id_dosenkirim);
+		$this->M_dosen->update($info, $id_dosenkirim);
 		$this->session->set_flashdata('m_sukses','Username dan Password <b>'.$id_dosenkirim. '</b> berhasil diedit!');
 		redirect('dosen/detail/'.$id_dosenkirim);
 	}
@@ -200,7 +200,7 @@ class Dosen extends CI_Controller{
 		$data['title']		="hapus dosen";
 		$data['judul']		="MASTER DATA > Dosen > Hapus";//judul
         $data['content']	="dosen/hapus.php"; //konten
-        $data['dosen']		=$this->m_dosen->ceki($id_dosen)->row_array(); //ambil data
+        $data['dosen']		=$this->M_dosen->ceki($id_dosen)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function hapus_proses($id_dosenkirim){
@@ -209,7 +209,7 @@ class Dosen extends CI_Controller{
 			'id_dosen'=>$id_dosenkirim,
 			'status_keanggotaan'=>$status_keanggotaan,
 		);
-        $this->m_dosen->update_hapus($info,$id_dosenkirim);
+        $this->M_dosen->update_hapus($info,$id_dosenkirim);
 		$this->session->set_flashdata('m_sukses','Data Dosen sudah berhasil dinonaktifkan!');
 		redirect('dosen');
     }
@@ -219,9 +219,9 @@ class Dosen extends CI_Controller{
 		$data['title']		="detail dosen";
 		$data['judul']		="MASTER DATA > Dosen > Detail"; //judul
         $data['content']	="dosen/detail.php"; //konten
-        $data['dosen']		=$this->m_dosen->ceki($id_dosen)->row_array(); //ambil data
-        $data['akses']		=$this->m_login->akses_dos($id_dosen)->row_array(); //ambil data
-		$data['kategori']	=$this->m_dosen->kategori()->result(); //ambil data
+        $data['dosen']		=$this->M_dosen->ceki($id_dosen)->row_array(); //ambil data
+        $data['akses']		=$this->M_login->akses_dos($id_dosen)->row_array(); //ambil data
+		$data['kategori']	=$this->M_dosen->kategori()->result(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function detail1($id_dosen){
@@ -230,9 +230,9 @@ class Dosen extends CI_Controller{
 		$data['title']		="detail dosen";
 		$data['judul']		="MASTER DATA > Dosen > Detail"; //judul
         $data['content']	="dosen1/detail.php"; //konten
-        $data['dosen']		=$this->m_dosen->ceki($id_dosen)->row_array(); //ambil data
-        $data['akses']		=$this->m_login->akses_dos($id_dosen)->row_array(); //ambil data
-		$data['kategori']	=$this->m_dosen->kategori()->result(); //ambil data
+        $data['dosen']		=$this->M_dosen->ceki($id_dosen)->row_array(); //ambil data
+        $data['akses']		=$this->M_login->akses_dos($id_dosen)->row_array(); //ambil data
+		$data['kategori']	=$this->M_dosen->kategori()->result(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function detailnon($id_dosen){
@@ -241,8 +241,8 @@ class Dosen extends CI_Controller{
 		$data['title']		="detail dosen";
 		$data['judul']		="MASTER DATA > Dosen > Detail Nonaktif"; //judul
         $data['content']	="dosen/detailnon.php"; //konten
-        $data['dosen']		=$this->m_dosen->cekn($id_dosen)->row_array(); //ambil data
-        $data['akses']		=$this->m_dosen->akses($id_dosen)->row_array(); //ambil data
+        $data['dosen']		=$this->M_dosen->cekn($id_dosen)->row_array(); //ambil data
+        $data['akses']		=$this->M_dosen->akses($id_dosen)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function aktifkan($id_dosen){
@@ -251,7 +251,7 @@ class Dosen extends CI_Controller{
 		$data['title']="aktifkan Dosen";
 		$data['judul']="MASTER DATA > Dosen > Aktifkan";//judul
         $data['content']="dosen/aktifkan.php"; //konten
-        $data['dosen']=$this->m_dosen->cekaktif($id_dosen)->row_array(); //ambil data
+        $data['dosen']=$this->M_dosen->cekaktif($id_dosen)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 	function aktifkan_proses($id_dosenkirim){
@@ -260,7 +260,7 @@ class Dosen extends CI_Controller{
 			'id_dosen'=>$id_dosenkirim,
 			'status_keanggotaan'=>$status,
 		);
-        $this->m_dosen->update_aktif($info,$id_dosenkirim);
+        $this->M_dosen->update_aktif($info,$id_dosenkirim);
 		$this->session->set_flashdata('m_sukses','Data Dosen sudah berhasil diaktifkan!');
 		redirect('dosen/nonaktif');
     }
@@ -274,10 +274,10 @@ class Dosen extends CI_Controller{
 		$data['title']="Dosen | SI DC AKN Bojonegoro";
 		$data['judul']="MASTER DATA > Dosen Nonaktif";
 		$data['content']="dosen/nonaktif.php";
-		$data['dosen']=$this->m_dosen->ambil_non($this->limit,$offset,$order_column,$order_type)->result();
+		$data['dosen']=$this->M_dosen->ambil_non($this->limit,$offset,$order_column,$order_type)->result();
 		//pengalamatan
 		$config['base_url']		=site_url('dosen/nonaktif/');
-        $config['total_rows']	=$this->m_dosen->jumlahnonaktif();
+        $config['total_rows']	=$this->M_dosen->jumlahnonaktif();
         $config['per_page']		=$this->limit;
         $config['uri_segment']	=3;
 		
@@ -314,8 +314,8 @@ class Dosen extends CI_Controller{
 			redirect(dosen);
 		}
 		else{
-			$cek=$this->m_dosen->cari($cari);
-			$cekid=$this->m_dosen->cariid($cari);
+			$cek=$this->M_dosen->cari($cari);
+			$cekid=$this->M_dosen->cariid($cari);
 			$hasil=$cek->num_rows();
 			$hasilid=$cekid->num_rows();
 			if($hasil>0){
@@ -346,7 +346,7 @@ class Dosen extends CI_Controller{
 			redirect(dosen);
 		}
 		else{
-			$cek=$this->m_dosen->carinon($cari);
+			$cek=$this->M_dosen->carinon($cari);
 			$hasil=$cek->num_rows();
 			if($hasil>0){
 				$data['dosen']=$cek->result();
@@ -404,8 +404,8 @@ class Dosen extends CI_Controller{
 			  $path = './assets/file/' . $file;
 			  delete_files($path);
 			   $this->load->model('M_dosen');
-			  $this->m_dosen->loaddata($dataexcel);
-			  $this->m_dosen->loaddata2($dataexcel2);
+			  $this->M_dosen->loaddata($dataexcel);
+			  $this->M_dosen->loaddata2($dataexcel2);
 			}
 			$this->session->set_flashdata('m_sukses','Data Berhasil Di Impor!');
 			redirect('dosen');
@@ -499,18 +499,18 @@ class Dosen extends CI_Controller{
 				'tipe'			=> $tipe,
 				'ukuran'		=> $ukuran
 			);
-		$this->m_kategori->simpan_gambardos($info);
+		$this->M_kategori->simpan_gambardos($info);
 		$this->session->set_flashdata('m_sukses', 'Gambar Berhasil Diupload');
 		$level=$this->session->userdata('level');
 			redirect('dosen/detail'.'/'.$id_dosen.'/'.$quality);
 	}
 	
 	function hapusgambardos($idup,$id){
-		$upload=$this->m_dosen->cekupload($idup)->row_array();
+		$upload=$this->M_dosen->cekupload($idup)->row_array();
 		$nama = $upload['nama_gambar'];
 		$dir = "gambardosen/".$nama;
 		unlink($dir);
-		$hapus=$this->m_dosen->hapusgambar($idup);
+		$hapus=$this->M_dosen->hapusgambar($idup);
 		$this->session->set_flashdata('m_sukses', 'Gambar Berhasil Dihapus');
 		redirect('dosen/detail'.'/'.$id);
 	}
@@ -521,8 +521,8 @@ class Dosen extends CI_Controller{
 		$data['title']		="Hapus Gambar Dosen";
 		$data['judul']		="MASTER DATA > Dosen > Hapus";//judul
         $data['content']	="dosen/hapusgambar.php"; //konten
-        $data['kategori']	=$this->m_kategori->cekdoss($id_upload)->row_array(); //ambil data
-        $data['dosen']		=$this->m_dosen->cekg($id_d)->row_array(); //ambil data
+        $data['kategori']	=$this->M_kategori->cekdoss($id_upload)->row_array(); //ambil data
+        $data['dosen']		=$this->M_dosen->cekg($id_d)->row_array(); //ambil data
 		$this->load->view('admin/template',$data);
 	}
 }

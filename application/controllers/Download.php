@@ -7,11 +7,11 @@ class Download extends CI_Controller{
 		$this->load->helper('back','url'); // helper yg di atas
 		backButtonHandle();
 		$this->load->library(array('pagination','form_validation','upload','tools'));
-		$this->load->model('m_mahasiswa');
-		$this->load->model('m_dosen');
-		$this->load->model('m_tata_usaha');
-		$this->load->model('m_kategori');
-		$this->load->model('m_login');
+		$this->load->model('M_mahasiswa');
+		$this->load->model('M_dosen');
+		$this->load->model('M_tata_usaha');
+		$this->load->model('M_kategori');
+		$this->load->model('M_login');
 		$this->load->database();
         $this->load->helper(array('form','url','file','download'));
 		$this->load->library('upload','tools');

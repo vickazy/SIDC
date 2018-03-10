@@ -140,9 +140,9 @@
 									<?php 
 										$session_id = $this->session->userdata('username');
 										$level = $this->session->userdata('level');
-										$akses1=$this->m_login->akses_tu($session_id)->row_array();
-										$akses2=$this->m_login->akses_dos($session_id)->row_array();
-										$akses3=$this->m_login->akses_maha($session_id)->row_array();
+										$akses1=$this->M_login->akses_tu($session_id)->row_array();
+										$akses2=$this->M_login->akses_dos($session_id)->row_array();
+										$akses3=$this->M_login->akses_maha($session_id)->row_array();
 										if($akses1){
 											$nama=$akses1['nama_tu'];
 											$id_user=$akses1['id_tu'];
@@ -166,9 +166,9 @@
 											<h4 class="username"><?php echo $nama;?></h4>
 											<p><?php echo "Username Anda : <strong>".$session_id."</strong>";?></p>
 											<?php
-												$jum1=$this->m_login->jum_akses_tu($session_id)->row_array();
-												$jum2=$this->m_login->jum_akses_dos($session_id)->row_array();
-												$jum3=$this->m_login->jum_akses_maha($session_id)->row_array();
+												$jum1=$this->M_login->jum_akses_tu($session_id)->row_array();
+												$jum2=$this->M_login->jum_akses_dos($session_id)->row_array();
+												$jum3=$this->M_login->jum_akses_maha($session_id)->row_array();
 												if($jum1>0){
 													$jumakses=$jum1['jml'];
 												}elseif($jum2>0){
