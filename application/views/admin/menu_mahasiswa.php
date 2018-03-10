@@ -20,7 +20,7 @@
 								</li>
 								<li class="">
 									<a href="<?php 
-												$akses3=$this->m_login->akses_maha($session_id)->row_array();
+												$akses3=$this->M_login->akses_maha($session_id)->row_array();
 												$nama=$akses3['nama_mahasiswa'];
 												$id=$akses3['nim'];
 									echo base_url('index.php/mahasiswa/detail/'.$id);?>">

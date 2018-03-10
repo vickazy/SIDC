@@ -20,7 +20,7 @@
 								</li>
 								<li class="">
 									<a href="<?php 
-									$akses3=$this->m_login->akses_dos($session_id)->row_array();
+									$akses3=$this->M_login->akses_dos($session_id)->row_array();
 									$nama=$akses3['nama_dosen'];
 									$id=$akses3['id_dosen'];
 									echo base_url('index.php/dosen/detail/'.$id);?>">
